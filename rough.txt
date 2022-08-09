@@ -1,0 +1,737 @@
+import 'package:flutter/material.dart';
+import 'package:ridersclub/directions_model.dart';
+import 'package:ridersclub/directions_repository.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    
+    
+
+
+
+adb usb
+adb tcpip 5555
+adb connect 192.168.0.106:5555
+AIzaSyC_6j60K8i2nLgUpYM5jYOsEkyzHifQzCI
+flutter clean
+flutter pub get
+
+flutter doctor
+flutter run
+flutter pub get
+
+connect to firebase
+gradlew signingReport
+
+flutter_signin_button: ^2.0.0
+flutter pub add firebase_auth
+flutter pub add google_sign_in
+flutter pub add shared_preferences
+flutter pub add fluttertoast
+flutter pub add cloud_firestore
+flutter pub add provider
+
+4 done
+
+
+Padding(
+              padding: const EdgeInsets.only(top: 40, left: 40),
+              child: Text(
+                "Rider's Club \nAccount",
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 50,
+                    fontWeight: FontWeight.w300),
+              ),
+            ),
+--------------------------------------
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_signin_button/flutter_signin_button.dart';
+
+import 'auth_service.dart';
+
+class LoginPage extends StatefulWidget {
+  const LoginPage({Key? key}) : super(key: key);
+
+  @override
+  _LoginPageState createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  @override
+  Widget build(BuildContext context) {
+    final Size size = MediaQuery.of(context).size;
+
+    return Scaffold(
+        body: Container(
+      decoration: BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage("assets/images/road.jpg"),
+          fit: BoxFit.cover,
+        ),
+      ),
+      child: SingleChildScrollView(
+        child: Stack(
+          children: [
+            Container(
+              margin: const EdgeInsets.fromLTRB(30, 100, 30, 0),
+              child: Center(
+                child: CircleAvatar(
+                  backgroundImage: AssetImage('assets/images/logo.gif'),
+                  radius: 120,
+                ),
+              ),
+            ),
+            // Container(
+            //     child: Center(
+            //   child: Text('RIDE WITH US',
+            //       style: const TextStyle(
+            //           fontSize: 30,
+            //           fontWeight: FontWeight.bold,
+            //           color: Colors.white)),
+            // )),
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 40, vertical: 50),
+              margin: EdgeInsets.only(
+                  top: MediaQuery.of(context).size.height * 0.85),
+              width: double.infinity,
+              height: 450,
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                      topRight: Radius.circular(50),
+                      topLeft: Radius.circular(50))),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      OutlinedButton(
+                        onPressed: () {
+                          AuthService().signInWithGoogle();
+                        },
+                        child: Text('SIGN IN WITH GOOGLE'),
+                        style: OutlinedButton.styleFrom(
+                          shape: StadiumBorder(),
+                        ),
+                      )
+                    ],
+                  )
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    ));
+  }
+}
+-----------------------------------------------------------------------------------
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+
+import 'auth_service.dart';
+
+class HomePage extends StatefulWidget {
+  @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  //String? user = FirebaseAuth.instance.currentUser!.email ?? FirebaseAuth.instance.currentUser!.displayName;
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.black,
+        title: const Text('Riders Club'),
+        actions: <Widget>[
+          IconButton(
+            icon: const Icon(Icons.search),
+            tooltip: 'Show Snackbar',
+            onPressed: () {
+              ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('This is a snackbar')));
+            },
+          ),
+          IconButton(
+            icon: Image.network(FirebaseAuth.instance.currentUser!.photoURL!),
+            tooltip: 'Go to the next page',
+            onPressed: () {
+              Navigator.push(context, MaterialPageRoute<void>(
+                builder: (BuildContext context) {
+                  return Scaffold(
+                    appBar: AppBar(
+                      backgroundColor: Colors.black,
+                      title: const Text('Riders Club | Profile'),
+                      actions: <Widget>[
+                        IconButton(
+                          icon: const Icon(Icons.search),
+                          tooltip: 'Show Snackbar',
+                          onPressed: () {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    content: Text('This is a snackbar')));
+                          },
+                        ),
+                        IconButton(
+                          icon: const Icon(Icons.navigate_next),
+                          tooltip: 'Go to the next page',
+                          onPressed: () {
+                            Navigator.push(context, MaterialPageRoute<void>(
+                              builder: (BuildContext context) {
+                                return Scaffold(
+                                  appBar: AppBar(
+                                    title: const Text('Next page'),
+                                  ),
+                                  body: const Center(
+                                    child: Text(
+                                      'This is the next page',
+                                      style: TextStyle(fontSize: 24),
+                                    ),
+                                  ),
+                                );
+                              },
+                            ));
+                          },
+                        ),
+                      ],
+                    ),
+                    body: Container(
+                      color: Colors.white,
+                      width: MediaQuery.of(context).size.width,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Image.network(
+                            FirebaseAuth.instance.currentUser!.photoURL!,
+                            height: 200,
+                            width: 200,
+                          ),
+                          Text(
+                            FirebaseAuth.instance.currentUser!.displayName!,
+                            style: const TextStyle(
+                                fontSize: 30,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black),
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Text(
+                            FirebaseAuth.instance.currentUser!.email!,
+                            style: const TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black),
+                          ),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          Text(
+                            FirebaseAuth.instance.currentUser!.uid,
+                            style: const TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black),
+                          ),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          Container(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 40, vertical: 35),
+                            margin: EdgeInsets.only(
+                                top: MediaQuery.of(context).size.height * 0.30),
+                            child: Column(
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    MaterialButton(
+                                      padding: const EdgeInsets.all(10),
+                                      height: 50,
+                                      minWidth: 250,
+                                      color: Colors.black,
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(50)),
+                                      child: const Text(
+                                        'LOGOUT',
+                                        style: TextStyle(
+                                            color: Colors.white, fontSize: 15),
+                                      ),
+                                      onPressed: () {
+                                        AuthService().signOut();
+                                        Navigator.pop(context);
+                                      },
+                                    ),
+                                  ],
+                                )
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              ));
+            },
+          ),
+        ],
+      ),
+      body: Container(
+        color: Colors.white,
+        width: MediaQuery.of(context).size.width,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Image.network(
+              FirebaseAuth.instance.currentUser!.photoURL!,
+            ),
+            Text(
+              FirebaseAuth.instance.currentUser!.displayName!,
+              style: const TextStyle(
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black87),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+------------------------search------------------------------------------
+---------
+import 'package:flutter/material.dart';
+import 'package:ridersclub/auth_service.dart';
+import 'package:ridersclub/pages/settings_page.dart';
+
+class SearchPage extends StatefulWidget {
+  SearchPage({Key? key}) : super(key: key);
+
+  @override
+  State<SearchPage> createState() => _SearchPageState();
+}
+
+class _SearchPageState extends State<SearchPage> {
+  TextEditingController searchTextEditingController = TextEditingController();
+  void onSearch() async{
+    Fire
+  }
+  homePageHeader() {
+    return AppBar(
+      automaticallyImplyLeading: false,
+      actions: <Widget>[
+        // IconButton(
+        //   icon: Icon(
+        //     Icons.settings,
+        //   ),
+        //   onPressed: () {
+        //     Navigator.push(
+        //       context,
+        //       MaterialPageRoute(builder: (context) => SettingsPage()),
+        //     );
+        //   },
+        // ),
+      ],
+      backgroundColor: Colors.black,
+      title: Container(
+        margin: new EdgeInsets.only(bottom: 4.0),
+        child: TextFormField(
+          style: TextStyle(color: Colors.white),
+          controller: searchTextEditingController,
+          decoration: InputDecoration(
+            hintText: "search",
+            hintStyle: TextStyle(color: Colors.white),
+            enabledBorder: UnderlineInputBorder(
+              borderSide: BorderSide(color: Colors.grey),
+            ),
+            focusedBorder: UnderlineInputBorder(
+              borderSide: BorderSide(color: Colors.white),
+            ),
+            filled: true,
+            prefixIcon: Icon(Icons.search),
+            suffixIcon: IconButton(
+              icon: Icon(
+                Icons.clear,
+              ),
+              onPressed: emptyTextFormField,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  emptyTextFormField() {
+    searchTextEditingController.clear();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: homePageHeader(),
+        body: RaisedButton.icon(
+            onPressed: () {
+              AuthService().signOut();
+              Navigator.pop(context);
+            },
+            icon: Icon(Icons.close),
+            label: Text("data")));
+  }
+}
+-------------------------------------------
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:ridersclub/login_page.dart';
+import 'package:ridersclub/pages/aboutus_page.dart';
+import 'package:ridersclub/pages/contactus_page.dart';
+import 'package:ridersclub/pages/settings_page.dart';
+import 'package:ridersclub/profile_page.dart';
+import 'package:ridersclub/utils/search_page.dart';
+
+import 'auth_service.dart';
+
+class HomePage extends StatefulWidget {
+  @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  //String? user = FirebaseAuth.instance.currentUser!.email ?? FirebaseAuth.instance.currentUser!.displayName;
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        title: const Text(
+          'Riders Club',
+        ),
+        backgroundColor: Colors.black,
+      ),
+      drawer: Drawer(
+        child: ListView(
+          // Important: Remove any padding from the ListView.
+          padding: EdgeInsets.zero,
+          children: <Widget>[
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => ProfilePage()),
+                );
+              },
+              child: UserAccountsDrawerHeader(
+                decoration: BoxDecoration(
+                  color: Colors.black,
+                ),
+                accountName: Text(
+                  FirebaseAuth.instance.currentUser!.displayName!,
+                ),
+                accountEmail: Text(FirebaseAuth.instance.currentUser!.email!),
+                currentAccountPicture: CircleAvatar(
+                  child: Image.network(
+                    FirebaseAuth.instance.currentUser!.photoURL!,
+                  ),
+                ),
+              ),
+            ),
+            ListTile(
+              leading: Icon(Icons.home),
+              title: Text("Home"),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => HomePage()),
+                );
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.settings),
+              title: Text("Settings"),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => SettingsPage()),
+                );
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.contacts),
+              title: Text("Contact Us"),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => ContactusPage()),
+                );
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.abc_outlined),
+              title: Text("About Us"),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => AboutusPage()),
+                );
+              },
+            ),
+          ],
+        ),
+      ),
+      body: Container(
+        color: Color(0xFFFFFFFF),
+        width: MediaQuery.of(context).size.width,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Image.network(
+              FirebaseAuth.instance.currentUser!.photoURL!,
+            ),
+            Text(
+              FirebaseAuth.instance.currentUser!.displayName!,
+              style: const TextStyle(
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black87),
+            ),
+          ],
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => SearchPage()),
+          );
+        },
+        backgroundColor: Colors.black,
+        child: const Icon(Icons.search_rounded),
+      ),
+    );
+  }
+}
+
+------------------------------------------------
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:ridersclub/directions_model.dart';
+import 'package:ridersclub/directions_repository.dart';
+import 'package:ridersclub/login_page.dart';
+import 'package:ridersclub/pages/aboutus_page.dart';
+import 'package:ridersclub/pages/contactus_page.dart';
+import 'package:ridersclub/pages/settings_page.dart';
+import 'package:ridersclub/profile_page.dart';
+import 'package:ridersclub/utils/search_page.dart';
+
+import 'dart:async';
+
+import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'auth_service.dart';
+
+class HomePage extends StatefulWidget {
+  @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  //String? user = FirebaseAuth.instance.currentUser!.email ?? FirebaseAuth.instance.currentUser!.displayName;
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Flutter Google Maps',
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        primaryColor: Colors.white,
+      ),
+      home: MapScreen(),
+    );
+  }
+}
+
+class MapScreen extends StatefulWidget {
+  @override
+  _MapScreenState createState() => _MapScreenState();
+}
+
+class _MapScreenState extends State<MapScreen> {
+  static const _initialCameraPosition = CameraPosition(
+    target: LatLng(37.773972, -122.431297),
+    zoom: 11.5,
+  );
+
+  GoogleMapController? _googleMapController;
+  Marker? _origin;
+  Marker? _destination;
+  Directions? _info;
+
+  @override
+  void dispose() {
+    _googleMapController?.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        centerTitle: false,
+        title: const Text('Google Maps'),
+        actions: [
+          if (_origin != null)
+            TextButton(
+              onPressed: () => _googleMapController?.animateCamera(
+                CameraUpdate.newCameraPosition(
+                  CameraPosition(
+                    target: _origin!.position,
+                    zoom: 14.5,
+                    tilt: 50.0,
+                  ),
+                ),
+              ),
+              style: TextButton.styleFrom(
+                primary: Colors.green,
+                textStyle: const TextStyle(fontWeight: FontWeight.w600),
+              ),
+              child: const Text('ORIGIN'),
+            ),
+          if (_destination != null)
+            TextButton(
+              onPressed: () => _googleMapController?.animateCamera(
+                CameraUpdate.newCameraPosition(
+                  CameraPosition(
+                    target: _destination!.position,
+                    zoom: 14.5,
+                    tilt: 50.0,
+                  ),
+                ),
+              ),
+              style: TextButton.styleFrom(
+                primary: Colors.blue,
+                textStyle: const TextStyle(fontWeight: FontWeight.w600),
+              ),
+              child: const Text('DEST'),
+            )
+        ],
+      ),
+      body: Stack(
+        alignment: Alignment.center,
+        children: [
+          GoogleMap(
+            myLocationButtonEnabled: false,
+            zoomControlsEnabled: false,
+            initialCameraPosition: _initialCameraPosition,
+            onMapCreated: (controller) => _googleMapController = controller,
+            markers: {
+              if (_origin != null) _origin!,
+              if (_destination != null) _destination!
+            },
+            polylines: {
+              if (_info != null)
+                Polyline(
+                  polylineId: const PolylineId('overview_polyline'),
+                  color: Colors.red,
+                  width: 5,
+                  points: _info!.polylinePoints
+                      .map((e) => LatLng(e.latitude, e.longitude))
+                      .toList(),
+                ),
+            },
+            onLongPress: _addMarker,
+          ),
+          if (_info != null)
+            Positioned(
+              top: 20.0,
+              child: Container(
+                padding: const EdgeInsets.symmetric(
+                  vertical: 6.0,
+                  horizontal: 12.0,
+                ),
+                decoration: BoxDecoration(
+                  color: Colors.yellowAccent,
+                  borderRadius: BorderRadius.circular(20.0),
+                  boxShadow: const [
+                    BoxShadow(
+                      color: Colors.black26,
+                      offset: Offset(0, 2),
+                      blurRadius: 6.0,
+                    )
+                  ],
+                ),
+                child: Text(
+                  '${_info?.totalDistance}, ${_info?.totalDuration}',
+                  style: const TextStyle(
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+            ),
+        ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Theme.of(context).primaryColor,
+        foregroundColor: Colors.black,
+        onPressed: () => _googleMapController?.animateCamera(
+          _info != null
+              ? CameraUpdate.newLatLngBounds(_info!.bounds, 100.0)
+              : CameraUpdate.newCameraPosition(_initialCameraPosition),
+        ),
+        child: const Icon(Icons.center_focus_strong),
+      ),
+    );
+  }
+
+  void _addMarker(LatLng pos) async {
+    if (_origin == null || (_origin != null && _destination != null)) {
+      // Origin is not set OR Origin/Destination are both set
+      // Set origin
+      setState(() {
+        _origin = Marker(
+          markerId: const MarkerId('origin'),
+          infoWindow: const InfoWindow(title: 'Origin'),
+          icon:
+              BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen),
+          position: pos,
+        );
+        // Reset destination
+        _destination == null;
+
+        // Reset info
+        _info == null;
+      });
+    } else {
+      // Origin is already set
+      // Set destination
+      setState(() {
+        _destination = Marker(
+          markerId: const MarkerId('destination'),
+          infoWindow: const InfoWindow(title: 'Destination'),
+          icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
+          position: pos,
+        );
+      });
+
+      // Get directions
+      final directions = await DirectionsRepository()
+          .getDirections(origin: _origin!.position, destination: pos);
+      setState(() => _info = directions);
+    }
+  }
+}
